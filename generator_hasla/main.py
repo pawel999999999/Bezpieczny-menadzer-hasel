@@ -11,14 +11,15 @@ class MainWindow:
 
     def __init__(self):
         self.main = ctk.CTk()
-        self.main.geometry("350x500")  # Poprawa błędu w definicji geometrii
+        self.main.geometry("350x500")
         self.main.resizable(width=False, height=False)
         self.main.title("Generator hasla")
         self.adds()
         self.main.mainloop()
 
     def generatePassword(self):
-        print("tak")
+        self.textBox.delete("0.0", "end")
+        #for i in range (self.length):
         if self.val.get() == 1:
             randomUpper = random.choices(string.ascii_uppercase, k=5)
         else:
@@ -32,10 +33,11 @@ class MainWindow:
         else:
             randomNum = []
         randomGen = random.sample(
-            randomUpper + randomSpecial + randomNum + random.choices(string.ascii_lowercase, k=16),
+            randomUpper + randomSpecial + randomNum + random.choices(string.ascii_lowercase, k=24),
             k=int(self.length.get()))
-        with open('haslo1.txt', 'a') as file:
+        with open('haslo1.txt', 'w') as file:
             file.write(f"{''.join(randomGen)}\n")
+        self.textBox.insert("0.0", randomGen)
 
     def adds(self):
         self.frame = ctk.CTkFrame(self.main)
@@ -57,10 +59,8 @@ class MainWindow:
         self.radioButton1 = ctk.CTkRadioButton(self.lengthFrame, text="12", value=12, variable=self.length)
         self.radioButton2 = ctk.CTkRadioButton(self.lengthFrame, text="18", value=18, variable=self.length)
         self.radioButton3 = ctk.CTkRadioButton(self.lengthFrame, text="24", value=24, variable=self.length)
-        self.length.set("10")
-        self.genPwd = ctk.CTkButton(self.main, text="Generate Password", width=25)
-        self.viewHistory = ctk.CTkButton(self.main, text="View History", width=25, command=self.getHistory)
-        # Usunięcie () po funkcji getHistory - przekazywana jest referencja do funkcji, nie jej wynik
+        self.genPwd = ctk.CTkButton(self.main, text="Generuj Hasło", width=25)
+        self.viewHistory = ctk.CTkButton(self.main, text="Jak mocne hasło", width=25, command=self.howStrong)
         self.textBox = ctk.CTkTextbox(self.main)
         self.widgetsInFrame = [self.uppercase, self.specialChar, self.number]
         for item in self.widgetsInFrame:
@@ -73,9 +73,9 @@ class MainWindow:
         self.mainWidgets = [self.frame, self.genPwd, self.viewHistory, self.textBox]
         for widget in self.mainWidgets:
             widget.pack(pady=2)
-        self.genPwd.configure(command=self.generatePassword)  # Usunięcie () po funkcji generatePassword
+        self.genPwd.configure(command=self.generatePassword)
 
-    def getHistory(self):
+    def howStrong(self):
         print("222")
 
 
