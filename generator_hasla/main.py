@@ -34,7 +34,7 @@ class MainWindow:
         randomGen = random.sample(
             randomUpper + randomSpecial + randomNum + random.choices(string.ascii_lowercase, k=16),
             k=int(self.length.get()))
-        with open('password.txt', 'a') as file:
+        with open('haslo.txt', 'a') as file:
             file.write(f"{''.join(randomGen)}\n")
 
     def adds(self):
