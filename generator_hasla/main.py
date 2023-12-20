@@ -1,30 +1,83 @@
-import customtkinter
 import customtkinter as ctk
+import random
+import string
 
-customtkinter.set_appearance_mode("Dark")
-customtkinter.set_default_color_theme("dark-blue")
+ctk.set_appearance_mode("Dark")
+ctk.set_default_color_theme("dark-blue")
+
+
 class MainWindow:
+    textBox = ctk.CTkTextbox
+
     def __init__(self):
         self.main = ctk.CTk()
-        self.main.geometry("350,500")
+        self.main.geometry("350x500")  # Poprawa błędu w definicji geometrii
         self.main.resizable(width=False, height=False)
         self.main.title("Generator hasla")
         self.adds()
         self.main.mainloop()
+
+    def generatePassword(self):
+        print("tak")
+        if self.val.get() == 1:
+            randomUpper = random.choices(string.ascii_uppercase, k=5)
+        else:
+            randomUpper = []
+        if self.special.get() == 1:
+            randomSpecial = random.choices("-_@!?.", k=2)
+        else:
+            randomSpecial = []
+        if self.num.get() == 1:
+            randomNum = random.choices(string.digits, k=5)
+        else:
+            randomNum = []
+        randomGen = random.sample(
+            randomUpper + randomSpecial + randomNum + random.choices(string.ascii_lowercase, k=16),
+            k=int(self.length.get()))
+        with open('password.txt', 'a') as file:
+            file.write(f"{''.join(randomGen)}\n")
+
     def adds(self):
         self.frame = ctk.CTkFrame(self.main)
         self.val, self.special, self.num = ctk.IntVar(), ctk.IntVar(), ctk.IntVar()
-        self.optionsFrame = ctk.CTkScrollableFrame(self.frame, label_text="Opcje", label_text_color="Blue")
-        self.uppercase = ctk.CTkCheckBox(self.optionsFrame, text="Wielkie litery", onvalue=1, offvalue=0, variable=self.val, text_color="White")
-        self.specialChar = ctk.CTkCheckBox(self.optionsFrame, text="Specjalne znaki", onvalue=1, offvalue=0, variable=self.special)
-        self.number = ctk.CTkCheckBox(self.optionsFrame, text="Number", onvalue=1, offvalue=0, variable=self.num)
+        self.optionsFrame = ctk.CTkScrollableFrame(self.frame, label_text="Długość hasła", label_text_color="White",
+                                                   label_font=('Georgia', 18), width=160, height=100,
+                                                   scrollbar_button_color="black",
+                                                   scrollbar_button_hover_color="black", fg_color="black")
+        self.uppercase = ctk.CTkCheckBox(self.optionsFrame, text="Wielkie litery", onvalue=1, offvalue=0,
+                                         variable=self.val, text_color="White")
+        self.specialChar = ctk.CTkCheckBox(self.optionsFrame, text="Specjalne znaki", onvalue=1, offvalue=0,
+                                           variable=self.special)
+        self.number = ctk.CTkCheckBox(self.optionsFrame, text="Cyfry", onvalue=1, offvalue=0, variable=self.num)
         self.length = ctk.IntVar()
-        self.lengthFrame = ctk.CTkLabel(self.frame,text="Dlugosc hasla")
+        self.lengthFrame = ctk.CTkScrollableFrame(self.frame, label_text="Długość hasła", label_text_color="White",
+                                                  label_font=('Georgia', 18), width=160, height=100,
+                                                  scrollbar_button_color="black",
+                                                  scrollbar_button_hover_color="black", fg_color="black")
+        self.radioButton1 = ctk.CTkRadioButton(self.lengthFrame, text="12", value=12, variable=self.length)
+        self.radioButton2 = ctk.CTkRadioButton(self.lengthFrame, text="18", value=18, variable=self.length)
+        self.radioButton3 = ctk.CTkRadioButton(self.lengthFrame, text="24", value=24, variable=self.length)
+        self.length.set("10")
+        self.genPwd = ctk.CTkButton(self.main, text="Generate Password", width=25)
+        self.viewHistory = ctk.CTkButton(self.main, text="View History", width=25, command=self.getHistory)
+        # Usunięcie () po funkcji getHistory - przekazywana jest referencja do funkcji, nie jej wynik
+        self.textBox = ctk.CTkTextbox(self.main)
         self.widgetsInFrame = [self.uppercase, self.specialChar, self.number]
-        for item in self.widgetsInFrame: item.pack(pady=2, anchor="w")
-        self.optionsFrame.grid(row=0, column=0)
-        self.lengthFrame.grid(row=0, column=1)
-        self.mainWidgets = [self.frame]
-        for widget in self.mainWidgets: widget.pack(pady=2)
+        for item in self.widgetsInFrame:
+            item.pack(pady=5, anchor="w")
+        self.radioButtons = [self.radioButton1, self.radioButton2, self.radioButton3]
+        for radioButton in self.radioButtons:
+            radioButton.grid()
+        self.optionsFrame.grid(row=0, column=1)
+        self.lengthFrame.grid(row=0, column=0)
+        self.mainWidgets = [self.frame, self.genPwd, self.viewHistory, self.textBox]
+        for widget in self.mainWidgets:
+            widget.pack(pady=2)
+        self.genPwd.configure(command=self.generatePassword)  # Usunięcie () po funkcji generatePassword
+
+    def getHistory(self):
+        print("222")
+
+
 if __name__ == '__main__':
     MainWindow()
