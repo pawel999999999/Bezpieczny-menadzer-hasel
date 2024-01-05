@@ -47,7 +47,7 @@ def login():
     print(state)
     if(sprawdz(state)):
         try:
-            gui2 = subprocess.Popen(['python', "program3.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
+            gui2 = subprocess.Popen(['python', "glowne.py"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
             gui.destroy()
             while gui2:
                 time.sleep(1)
@@ -57,7 +57,7 @@ def login():
 def zajerestruj():
    
     try:
-        subprocess.Popen(['python', "program2.py" ])
+        subprocess.Popen(['python', "rejestrator.py" ])
     except subprocess.CalledProcessError as e:
         print('Błąd')
     
