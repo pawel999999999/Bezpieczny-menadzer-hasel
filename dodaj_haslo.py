@@ -35,7 +35,10 @@ def dodaj():
     state0 = button0.get()
     state1 = button1.get()
     state2 = button2.get()
-    state = state+"Platfotma::"+state0+"Uztykownik::"+state1+"Hasło::"+state2
+    if (state == None):
+        state = "::"+state+"::"+state0+"::"+state1+"::"+state2
+    else:
+        state = state+"::"+state0+"::"+state1+"::"+state2
     print("CHUJ " + state)
     state = zaszyfruj(state)
     with open("hasla11.txt", 'wb') as file:

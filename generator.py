@@ -19,25 +19,24 @@ class MainWindow:
 
     def generatePassword(self):
         self.textBox.delete("0.0", "end")
-        #for i in range (self.length):
         if self.val.get() == 1:
-            randomUpper = random.choices(string.ascii_uppercase, k=5)
+            Up = random.choices(string.ascii_uppercase, k=6)
         else:
-            randomUpper = []
+            Up = []
         if self.special.get() == 1:
-            randomSpecial = random.choices("-_@!?.", k=2)
+            Sp = random.choices("~`!@#$%^&*()_-=}[]:;'\|<>?,./", k=4)
         else:
-            randomSpecial = []
+            Sp = []
         if self.num.get() == 1:
-            randomNum = random.choices(string.digits, k=5)
+            Number = random.choices(string.digits, k=5)
         else:
-            randomNum = []
+            Number = []
         randomGen = random.sample(
-            randomUpper + randomSpecial + randomNum + random.choices(string.ascii_lowercase, k=24),
+            Up + Up + Sp + Number + random.choices(string.ascii_lowercase, k=24),
             k=int(self.length.get()))
-        with open('haslo1.txt', 'w') as file:
-            file.write(f"{''.join(randomGen)}\n")
+        randomGen =''.join(randomGen)
         self.textBox.insert("0.0", randomGen)
+        
 
     def adds(self):
         self.frame = ctk.CTkFrame(self.main)
@@ -76,7 +75,7 @@ class MainWindow:
         self.genPwd.configure(command=self.generatePassword)
 
     def howStrong(self):
-        print("222")
+       return False
 
 
 if __name__ == '__main__':

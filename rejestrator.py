@@ -18,7 +18,7 @@ tajnyKlucz = "Moj_tajny_klucz"
 def generator():
 
     try:
-        subprocess.Popen(['python', "generator.py" ])
+        subprocess.Popen(["generator.exe"], creationflags = subprocess.CREATE_NO_WINDOW, shell=True )
     except subprocess.CalledProcessError as e:
         print('Błąd')
 

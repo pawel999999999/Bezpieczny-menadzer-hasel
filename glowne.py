@@ -7,6 +7,8 @@ import time
 from cryptography.fernet import Fernet
 import base64
 from tkinter import *
+import numpy
+from CTkMessagebox import CTkMessagebox
 
 
 key ="TOMETOMETOMETOMETOMETOMETOMETOME"
@@ -16,6 +18,27 @@ def encode_to_urlsafe_base64(input_string):
         #print(urlsafe_base64_bytes)
         #print(Fernet.generate_key())
         return urlsafe_base64_bytes
+def upozadkuj(text):
+    elements = text.split('::')
+    domeny =[]
+    uzytkownicy= []
+    current_label= ""
+    hasla =[]
+    i = 0
+    Wartosciprzerwa = text.split('::')
+    print(Wartosciprzerwa[i])
+    for i in range(0, len(elements)-1):
+        if i%3==0:
+            domeny.append(Wartosciprzerwa[i+1])
+        if i%3==1:
+            uzytkownicy.append(Wartosciprzerwa[i+1])
+        if i%3==2:
+            hasla.append(Wartosciprzerwa[i+1])         
+
+    print(domeny,uzytkownicy,hasla)
+    tablica=[domeny,uzytkownicy,hasla]
+    print(tablica)
+    return tablica
 key = encode_to_urlsafe_base64(key)
 customtkinter.set_appearance_mode("Dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -27,43 +50,65 @@ sciezka = "hasla.txt"
 a=0
 cipher = Fernet(key)
 class PasswordManagerApp:
+    CTkMessagebox(title="Faza beta programu", message="Program jest w fazie beta! Przed wcisniecie 'ok' wstaw do pliku glownego swoj zaszfrowany plik z haslami pod nazwa hasla11.txt, po skorzystaniu z aplikacji zapisz go na bezpiecznym nosniku i usun z komputera")
     passwords = []
+    
     def dodaj_haslo(self):
         try:
-            subprocess.Popen(['python', "dodaj_haslo.py" ])
+            subprocess.Popen(["dodaj_haslo.exe"],creationflags=subprocess.CREATE_NO_WINDOW, shell=True )
         except subprocess.CalledProcessError as e:
             print('Błąd')
     def edytuj_haslo(self):
-        try:
-            subprocess.Popen(['python', "dodaj_haslo.py" ])
-        except subprocess.CalledProcessError as e:
-            print('Błąd')
+        return False
     def usun_haslo(self):
         return False
     def generator(self):
         try:
-            subprocess.Popen(['python', "generator.py" ])
+            subprocess.Popen(["generator.exe"],creationflags=subprocess.CREATE_NO_WINDOW, shell=True )
         except subprocess.CalledProcessError as e:
             print('Błąd')
+    def wyswietlanie(self, tablica,j):
+        a=""
+        self.side_display.configure(state=NORMAL)  
+        self.username_display.configure(state=NORMAL)  
+        self.password_display.configure(state=NORMAL) 
+        
+        for i in tablica:
+            a=a+i+"\n"
+        if(j==0):
+            self.side_display.delete(0.0,"end")
+            self.side_display.insert(0.0,a)
+        if(j==1):
+           self.username_display.delete(0.0,"end")
+           self.username_display.insert(0.0,a) 
+        if(j==2):
+           self.password_display.delete(0.0,"end")
+           self.password_display.insert(0.0,a)
+        self.side_display.configure(state=DISABLED)  
+        self.username_display.configure(state=DISABLED)  
+        self.password_display.configure(state=DISABLED) 
     def zdeszyfruj(self):
         with open("hasla11.txt", 'rb') as file:
             zawartosc = file.read()
         file.close()
         if zawartosc:
-            print("CHHUJ")
             decrypted_message = cipher.decrypt(zawartosc).decode()
             print(decrypted_message)
-            platform,user,password = []
-            
+            tablica=upozadkuj(decrypted_message)
+            self.wyswietlanie(tablica[0],0)
+            self.wyswietlanie(tablica[1],1)
+            self.wyswietlanie(tablica[2],2)
             return decrypted_message   
         else:
             return ""
+        
     def __init__(self, root):
         self.root = root
         self.root.title("Menedżer Haseł")
         self.root.geometry("750x400")
+        my_font = customtkinter.CTkFont(family="Helvetica", size= 26, weight="bold")
 
-        label = customtkinter.CTkLabel(root, text="Menedżer Haseł", font=("Arial", 16))
+        label = customtkinter.CTkLabel(root, text="Menedżer Haseł", font=my_font)
         label.pack(pady=10)
 
         frame = customtkinter.CTkFrame(root)
@@ -75,20 +120,21 @@ class PasswordManagerApp:
         my_framemy_frame.pack(pady=5)
         button_edytuj = customtkinter.CTkButton(frame, text="Edytuj hasło", command=self.edytuj_haslo)
         button_edytuj.grid(row=0, column=1, padx=10)
-        my_font = customtkinter.CTkFont(family="Helvetica", size= 26, weight="bold")
         button_usun = customtkinter.CTkButton(frame, text="Usuń hasło", command=self.usun_haslo)
         button_usun.grid(row=0, column=2, padx=10)
         button_pokaz = customtkinter.CTkButton(frame, text="Odswiez", command=self.zdeszyfruj)
         button_pokaz.grid(row=0, column=2, padx=10)
         button_generator = customtkinter.CTkButton(frame, text="Generator haseł", command=self.generator)
         button_generator.grid(row=0, column=3, padx=10)
-        self.side_display = customtkinter.CTkTextbox(my_framemy_frame, height=600, width=234,font=my_font,corner_radius=5,border_width=4,activate_scrollbars=True)
+        self.side_display = customtkinter.CTkTextbox(my_framemy_frame, height=1800, width=234,font=my_font,corner_radius=5,border_width=4,activate_scrollbars=False,wrap=NONE)
         self.side_display.pack(side="left")
-        self.username_display = customtkinter.CTkTextbox(my_framemy_frame, height=600, width=234,font=my_font,corner_radius=2,border_width=4,activate_scrollbars=True)
+        self.username_display = customtkinter.CTkTextbox(my_framemy_frame, height=1800, width=234,font=my_font,corner_radius=2,border_width=4,activate_scrollbars=False,wrap=NONE)
         self.username_display.pack(side="left")
-        self.password_display = customtkinter.CTkTextbox(my_framemy_frame, height=600, width=234,font=my_font,corner_radius=2,border_width=4,activate_scrollbars=True)
+        self.password_display = customtkinter.CTkTextbox(my_framemy_frame, height=1800, width=234,font=my_font,corner_radius=2,border_width=4,activate_scrollbars=False,wrap=NONE)
         self.password_display.pack(side="left")
-        
+        self.side_display.configure(state=DISABLED)  
+        self.username_display.configure(state=DISABLED)  
+        self.password_display.configure(state=DISABLED)  
 
         
 if __name__ == "__main__":
