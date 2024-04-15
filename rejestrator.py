@@ -18,13 +18,13 @@ tajnyKlucz = "Moj_tajny_klucz"
 def generator():
 
     try:
-        subprocess.Popen(["generator.exe"], creationflags = subprocess.CREATE_NO_WINDOW, shell=True )
+        subprocess.Popen(["python","generator.py"], creationflags = subprocess.CREATE_NO_WINDOW, shell=True )
     except subprocess.CalledProcessError as e:
         print('Błąd')
 
 def savePasswords(deta):
     print(deta)
-    with open("hasla.txt", 'a') as file:
+    with open("hashe.txt", 'a') as file:
         file.write(deta)
 
 def zajerestruj():

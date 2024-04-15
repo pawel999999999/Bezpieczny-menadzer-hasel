@@ -9,8 +9,13 @@ import base64
 from tkinter import *
 import numpy
 from CTkMessagebox import CTkMessagebox
+#from main import *
+#from dodaj_haslo import *
 
-
+text_received = sys.argv[1]
+print("tomek" + text_received)
+text_received=text_received[:32]
+file_name = text_received[:7] + ".txt"
 key ="TOMETOMETOMETOMETOMETOMETOMETOME"
 def encode_to_urlsafe_base64(input_string):
         input_bytes = input_string.encode('utf-8')
@@ -40,22 +45,25 @@ def upozadkuj(text):
     print(tablica)
     return tablica
 key = encode_to_urlsafe_base64(key)
+print(key)
+key = encode_to_urlsafe_base64(text_received)
+print(key)
 customtkinter.set_appearance_mode("Dark")
 customtkinter.set_default_color_theme("dark-blue")
 gui = customtkinter.CTk()
 gui.geometry("700x400")
 uzytkownik = ""
 haslo = ""
-sciezka = "hasla.txt"
+sciezka = "hashe.txt"
 a=0
 cipher = Fernet(key)
 class PasswordManagerApp:
-    CTkMessagebox(title="Faza beta programu", message="Program jest w fazie beta! Przed wcisniecie 'ok' wstaw do pliku glownego swoj zaszfrowany plik z haslami pod nazwa hasla11.txt, po skorzystaniu z aplikacji zapisz go na bezpiecznym nosniku i usun z komputera")
+    #CTkMessagebox(title="Faza beta programu", message="Program jest w fazie beta! Przed wcisniecie 'ok' wstaw do pliku glownego swoj zaszfrowany plik z haslami pod nazwa hasla11.txt, po skorzystaniu z aplikacji zapisz go na bezpiecznym nosniku i usun z komputera")
     passwords = []
     
     def dodaj_haslo(self):
         try:
-            subprocess.Popen(["dodaj_haslo.exe"],creationflags=subprocess.CREATE_NO_WINDOW, shell=True )
+            subprocess.Popen(["python","dodaj_haslo.py", text_received], shell=True)
         except subprocess.CalledProcessError as e:
             print('Błąd')
     def edytuj_haslo(self):
@@ -64,7 +72,7 @@ class PasswordManagerApp:
         return False
     def generator(self):
         try:
-            subprocess.Popen(["generator.exe"],creationflags=subprocess.CREATE_NO_WINDOW, shell=True )
+            subprocess.Popen(["python","generator.py"],creationflags=subprocess.CREATE_NO_WINDOW, shell=True )
         except subprocess.CalledProcessError as e:
             print('Błąd')
     def wyswietlanie(self, tablica,j):
@@ -88,7 +96,7 @@ class PasswordManagerApp:
         self.username_display.configure(state=DISABLED)  
         self.password_display.configure(state=DISABLED) 
     def zdeszyfruj(self):
-        with open("hasla11.txt", 'rb') as file:
+        with open(file_name, 'rb') as file:
             zawartosc = file.read()
         file.close()
         if zawartosc:

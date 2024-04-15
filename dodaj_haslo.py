@@ -1,10 +1,19 @@
+import sys
+import os
 import customtkinter
 import random
 import string
 from cryptography.fernet import Fernet
-
 import base64
-key ="TOMETOMETOMETOMETOMETOMETOMETOME"
+
+text_received = sys.argv[1]
+key = text_received
+file_name = text_received[:7] + ".txt"
+if not os.path.exists(file_name):
+    with open(file_name, "w") as file:
+        file.write("")
+else:
+    print("Plik już istnieje. Nic nie zostało zmienione.")
 def encode_to_urlsafe_base64(input_string):
         input_bytes = input_string.encode('utf-8')
         urlsafe_base64_bytes = base64.urlsafe_b64encode(input_bytes)
@@ -14,7 +23,7 @@ def encode_to_urlsafe_base64(input_string):
 key=encode_to_urlsafe_base64(key)
 cipher = Fernet(key)
 def zdeszyfruj():
-    with open("hasla11.txt", 'rb') as file:
+    with open(file_name, 'rb') as file:
         zawartosc = file.read()
     file.close()
     if zawartosc:
@@ -39,9 +48,9 @@ def dodaj():
         state = "::"+state+"::"+state0+"::"+state1+"::"+state2
     else:
         state = state+"::"+state0+"::"+state1+"::"+state2
-    print("CHUJ " + state)
+    print( state)
     state = zaszyfruj(state)
-    with open("hasla11.txt", 'wb') as file:
+    with open(file_name, 'wb') as file:
         file.write(state)
     file.close()
     state= zdeszyfruj()

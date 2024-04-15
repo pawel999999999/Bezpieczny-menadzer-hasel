@@ -6,6 +6,7 @@ import sys
 import time
 import hmac
 import cryptography.hazmat
+#from glowne import *
 
 customtkinter.set_appearance_mode("Dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -13,7 +14,7 @@ gui = customtkinter.CTk()
 gui.geometry("700x400")
 uzytkownik = ""
 haslo = ""
-sciezka = "hasla.txt"
+sciezka = "hashe.txt"
 a=0
 tajnyKlucz = "Moj_tajny_klucz"
 tajnyKlucz2 = b'Nowt_tajny_klucz'
@@ -47,9 +48,7 @@ def login():
     print(state)
     if(sprawdz(state)):
         try:
-            gui2 = subprocess.Popen([ "glowne.exe"],creationflags=subprocess.CREATE_NO_WINDOW, shell=True,stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
-            gui2.stdin.write("Tomek")
-            gui2.stdin.close()
+            gui2 = subprocess.Popen(["python","glowne.py", state], shell=True)
             gui.destroy()
             while gui2:
                 time.sleep(1)
@@ -57,11 +56,7 @@ def login():
             print('Błąd')
 
 def zajerestruj():
-   
-    try:
-        subprocess.Popen(["rejestrator.exe"],creationflags=subprocess.CREATE_NO_WINDOW)
-    except subprocess.CalledProcessError as e:
-        print('Błąd')
+    subprocess.Popen(["python", "rejestrator.py"], creationflags=subprocess.CREATE_NO_WINDOW, shell=True)
     
 
 
