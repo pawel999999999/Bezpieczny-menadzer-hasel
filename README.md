@@ -7,7 +7,7 @@ Stworzyłem password manager, który spełnia standardy bezpieczeństwa i pozysk
 6. Majac ten plik dopisujemy nową stronę, użytkownika i hasło. Plik w tym momencie jest deszyfrowany zmieniony by dopisać nowe dane i znów zaszyfrowany, tak dzieje się identycznie przy metodzie wyświetlania haseł.
 7. Zamykając wylogowujemy się.
 
-Program posiada generator haseł by się nie męczyć przy tworzeniu trudnych do złamania haseł. Każde hasło powinno być inne, a hasło do zalogowania się na menager haseł mocne.
+Program posiada generator haseł by się nie męczyć przy tworzeniu trudnych do złamania haseł. Każde hasło powinno być inne, a hasło do zalogowania się na menager haseł mocne. 
 
 
 ![obraz](https://github.com/WojtekMatr/Bezpieczny-menadzer-hasel/assets/127395210/43298dd3-a2a6-4714-9218-778b2ceab95a)
